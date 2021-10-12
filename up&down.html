@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /** 
+ up&down(1~100)중의 랜덤 숫자 맞추기
+ 입력한 숫자가 정답보다 크면 up
+ 입력한 숫자가 정답조다 작으면 down
+ 정답을 맞추면 정답과 함께 시도 횟수 표현
+*/
+      function quizeRandomInt() {
+        let randomInt = Math.floor(Math.random() * 101);
+        let count = 0;
+        let answer = 0;
+        alert("정답" + randomInt);
+        while (answer !== randomInt) {
+          answer = (prompt("1~100숫자 입력", answer) ?? 0) * 1;
+          const r =
+            answer == randomInt ? "정답" : answer < randomInt ? "UP" : "DOWN";
+          if (r !== "정답") {
+            alert(r);
+          }
+          count++;
+        }
+        alert(`정답 : ${answer},  시도 : ${count}번`);
+      }
+      quizeRandomInt();
+    </script>
+  </body>
+</html>
