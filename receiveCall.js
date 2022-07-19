@@ -50,7 +50,6 @@ function solution(users, k, report) {
     userInfoMap[user] = { report_users: [], reported_count: 0, ban_users: [] };
   });
 
-  console.log("uniqReport", uniqReport);
   // 신고정보를 userInfo에 정리
   uniqReport.forEach(info => {
     const [reporter, reported] = info.split(" ");
