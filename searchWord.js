@@ -46,39 +46,6 @@ var lengthOfLongestSubstring = function (s) {
   return word.length;
 };
 
-// function solution(s) {
-//   const max = s.length;
-//   const words = {};
-//   let answer = "";
-//   for (let i = 0; i < max; i++) {
-//     const v = s[i];
-//     for (let props in words) {
-//       let current = words[props];
-
-//       if (current.indexOf(v) == -1) {
-//         const objString = current + v;
-//         current = objString;
-//         words[props] = current;
-//       } else {
-//         current = v;
-//         delete words[props];
-//       }
-
-//       if (current.length > answer.length) {
-//         answer = current;
-//       }
-//     }
-//     if (words[v] === undefined) {
-//       words[v] = v;
-//     }
-//   }
-//   if (answer === "") {
-//     answer = s;
-//   }
-//   console.log(words);
-//   return answer.length;
-// }
-
 /**
  *  sliding window 방식
  *  문자열을 직접 탐색하지 않고
@@ -96,54 +63,19 @@ function solution2(s) {
       words[char] = 0;
     }
     words[char]++;
+    /**
+     * 텍스트 중복이 발생할 경우
+     * left를 통해 중복 문자를 제거한다.
+     */
     while (words[char] > 1) {
       let l = s[left];
       words[l]--;
       left++;
     }
-    console.log(words);
-    console.log(right, "left", left);
     answer = Math.max(answer, right - left + 1);
-    console.log("answer", answer);
+
     right++;
   }
-  return answer;
-}
-
-/**
- * sliding windows 최적화 방법
- *
- * 문자열을 순회할 필요없이 문자열을 index에 할당하고 중복이 발생하면 중복이 발생한 인덱스로 이동시킴
- * 0 1 2 3
- * a b c e
- * @param {*} s
- * @returns
- */
-function solution3(s) {
-  let left = 0;
-  let right = 0;
-  let answer = 0;
-  const words = {};
-  while (right < s.length) {
-    const char = s[right];
-    if (words[char] === undefined) {
-      words[char] = 0;
-    }
-    words[char]++;
-
-    while (words[char] > 1) {
-      let l = s[left];
-      words[l]--;
-      left++;
-    }
-
-    console.log(words);
-    console.log(right, "left", left);
-    answer = Math.max(answer, right - left + 1);
-    console.log("answer", answer);
-    right++;
-  }
-
   return answer;
 }
 
@@ -156,7 +88,6 @@ function solution3(s) {
   let res = 0;
   const map = {};
   let j = 0;
-  console.log("input", s);
   for (let i = 0; i < len; i++) {
     const char = s[i];
     // 중복 글자를 만나면 커서를 앞으로 당김.
