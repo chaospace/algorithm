@@ -41,3 +41,35 @@ if (str[l] === str[h]) {
   min(findMinInsertion(str, l, h - 1), findMinInsertion(str, l + 1, h)) + 1;
 }
 ```
+
+## 동적솔루션을 이용한 개선사항
+
+재귀를 이용해 답을 찾다보면 중복된 계산을 수행하게 되고 대상 문자열이 길수록 반복도 많다.  
+이를 방지하기 위해 DP(Dynamic Programming )를 이용할 수 있고 적용한 코드는 아래와 같다.
+
+```javascript
+//정보를 기억할 맵생성
+const len = str.length;
+const map = [];
+let i = 0;
+let h = 0;
+let gap = 0;
+for (i = 0; i < len; i++) {
+  map[i] = [];
+  for (h = 0; h < len; h++) {
+    map[i][h] = 0;
+  }
+}
+// 기준문자를 늘려가며 체크
+for (gap = 1; gap < len; gap++) {
+  // 시작과 끝문자를 비교해가며 조건체크
+  for (i = 0, h = gap; h < len; i++, h++) {
+    map[i][h] =
+      str[i] === str[h]
+        ? map[i + 1][h - 1]
+        : Math.min(map[i + 1][h], map[i][h - 1]) + 1;
+  }
+}
+// 원하는 결과인 str[0 ... n-1 ](전체 문자열)인 경우 필요한 최소 추가문자의 수를 추출
+return map[0][len - 1];
+```
