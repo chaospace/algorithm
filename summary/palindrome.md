@@ -73,3 +73,44 @@ for (gap = 1; gap < len; gap++) {
 // 원하는 결과인 str[0 ... n-1 ](전체 문자열)인 경우 필요한 최소 추가문자의 수를 추출
 return map[0][len - 1];
 ```
+
+## 중심 주변 확장을 이용한 방법
+
+펠린드롬을 이루는 문자열은 중심을 기준으로 대칭을 이루는 데 이 중심은 펠린드롬을 이루는 문자열의 길이에 따라 <code>2n-1</code>에 위치합니다.
+
+```javascript
+function solution(s) {
+  if (s == null || s.length < 1) return "";
+  let start = 0;
+  let end = 0;
+  let len = s.length;
+  for (let i = 0; i < len; i++) {
+    let c1 = expandAroundCenter(s, i, i);
+    let c2 = expandAroundCenter(s, i, i + 1);
+    let c = Math.max(c1, c2);
+    if (c > end - start) {
+      start = i - (c - 1) / 2;
+      end = i + c / 2;
+    }
+  }
+  return s.substring(start, end + 1);
+}
+
+/**
+ * 주어진 문자열 s를 기준으로 펠린드롬 여부를 체크 하면 센터index를 반환
+ * left :시작
+ * right: 끝
+ */
+function expandAroundCenter(s, left, right) {
+  let L = left;
+  let R = right;
+  let len = s.length;
+  // 문자열이 동일하지 않을 때 까지 인덱스를 밖으로 늘리며 체크
+  while (L >= 0 && R < len && s[L] === s[R]) {
+    L--;
+    R++;
+  }
+  // 증감연산자로 늘어난 1을 보정 후 리턴
+  return R - L - 1;
+}
+```
