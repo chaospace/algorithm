@@ -136,4 +136,97 @@ const temp = `
 '2,5,8,3,9,4,7,6,1'
 `;
 
-console.log(solution(start_input));
+//console.log(solution(start_input));
+
+function sdoku(input) {
+  const board = input
+    .replaceAll(" ", "")
+    .split("\n")
+    .filter(v => v.length > 1)
+    .map(o => o.split(""));
+
+  function* getBoardInfo() {
+    const rows = board.length;
+    for (let row = 0; row < rows; row++) {
+      const columns = board[row].length;
+      for (let column = 0; column < columns; column++) {
+        const value = board[row][column];
+        if (value === "0") {
+          for (let k = 1; k <= 9; k++) {
+            yield { row, column, value: k.toString() };
+          }
+        }
+      }
+    }
+  }
+
+  // 0이 아닌 경우 true 반환
+  function isTruthy(value) {
+    return !!Number(value);
+  }
+  function noDuplicates(array) {
+    const values = array.filter(isTruthy);
+    const unique = new Set();
+    values.forEach(element => {
+      unique.add(element);
+    });
+    return values.length === unique.size;
+  }
+
+  function checkRow(inputBoard) {
+    return inputBoard.every(noDuplicates);
+  }
+
+  function transformRows(inputBoard) {
+    return inputBoard[0].map((_, idx) => {
+      return inputBoard.map(array => {
+        return array[idx];
+      });
+    });
+  }
+
+  /**
+   * 원본배열을 3x3 배열로 만들기
+   * 결국 이중루프를 돌며 원하는 인덱스 만큼 묶어서 배열을 반환
+   * @param {*} inputBoard
+   */
+  function getTransformGroupInfo(inputBoard) {
+    return transformRows(
+      inputBoard.map(row => {
+        return row.flatMap((_, idx) => {
+          if (idx % 3) {
+            return [];
+          } else {
+            return row.slice(idx, idx + 3);
+          }
+        });
+      })
+    ).map(ele => {
+      return ele.flatMap((_, idx) => {
+        if (idx % 3) {
+          return [];
+        } else {
+          return ele.slice(idx, idx + 3);
+        }
+      });
+    });
+  }
+  //console.log("board", getTransformGroupInfo(board));
+  const boardGen = getBoardInfo();
+  for (let score of boardGen) {
+    board[score.row][score.column] = score.value;
+    if (
+      checkRow(board) &&
+      checkRow(transformRows(board)) &&
+      checkRow(getTransformGroupInfo(board))
+    ) {
+      console.log("correct", score, board);
+    }
+  }
+}
+
+// && 연산동작 확인
+// const foo = value => value;
+// console.log(foo("cha") && foo(undefined));
+
+sdoku(start_input);
