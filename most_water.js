@@ -75,34 +75,24 @@ function calculate(points, p) {
  */
 function solution(height) {
   let leftId = 0;
-  let rightId = max - 1;
+  let rightId = height.length - 1;
   let sum = 0;
   // 시작값은 항상 좌우 끝값으로 설정
   // 좌우 높이를 비교하며 더 낮을 쪽의 인덱스를 변경하며 높이를 계산해 가장 높을 값을 기억.
-  while (rightId - leftId >= 1) {
+  while (rightId > leftId) {
     const nextLId = leftId + 1;
     const nextRId = rightId - 1;
     const pl = { x: leftId, y: height[leftId] };
     const pr = { x: rightId, y: height[rightId] };
-    const plNext = { x: nextLId, y: height[nextLId] };
-    const prNext = { x: nextRId, y: height[nextRId] };
 
     const base = getReactArea(pl, pr); // 현 위치에 크기
-    const nextR = getReactArea(pl, prNext); // 우측을 당길 경우 크기
-    const nextL = getReactArea(plNext, pr); // 좌측을 당길 경우 크기
-
-    sum = Math.max(sum, Math.max(base, Math.max(nextR, nextL)));
+    sum = Math.max(sum, base);
 
     // 좌측 높이가 더 크면 우측을 당김
-    if (pl.y > pr.y) {
+    if (pl.y >= pr.y) {
       rightId--;
       //우측이 더 크면 좌측을 당김
     } else if (pl.y < pr.y) {
-      leftId++;
-      // 이전, 다음 높이를 비교해 낮은 쪽을 당김.
-    } else if (plNext.y > prNext.y) {
-      rightId--;
-    } else {
       leftId++;
     }
   }
@@ -119,6 +109,6 @@ function solution(height) {
 // console.log(solution([2, 3, 10, 5, 7, 8, 9]));
 // console.log(solution([1, 2, 1]));
 // console.log(solution([0, 2]));
-// console.log(solution([1, 3, 2, 5, 25, 24, 5]));
+console.log(solution([1, 3, 2, 5, 25, 24, 5]));
 console.log(solution([0, 0, 2, 5, 25, 0, 0]));
 //console.log(solution(arr));
