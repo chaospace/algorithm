@@ -173,3 +173,8 @@
   |neo|없음|없음|
 
 </details>
+
+## LeetCode
+
+- [가장 긴 문자열 찾기](./summary/LCS.md)
+- [펠린드롬 문자열 찾기](./summary/palindrome.md)
