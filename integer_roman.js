@@ -77,36 +77,41 @@ function solution(input) {
   });
 
   let v = input;
+  let answer = "";
   const arr = [];
   // 나눌 수가 없을 때까지 반복
   while (quotienties.length) {
     const base = quotienties[quotienties.length - 1];
-    const baesKey = keys[values.indexOf(base)];
-    const quotient = Math.floor(v / base);
+    const quotionKey = keys[values.indexOf(base)];
     const remainder = v % base;
-    arr.push({
-      key: baesKey,
-      value: base,
-      quotient,
-      remainder
-    });
+    // arr.push({
+    //   key: quotionKey,
+    //   value: base,
+    //   quotient,
+    //   remainder
+    // });
+    let quotient = Math.floor(v / base);
+    while (quotient > 0) {
+      answer += quotionKey;
+      quotient--;
+    }
     v = remainder;
     quotienties = quotienties.filter(t => remainder / t >= 1);
   }
-  let answer = "";
-  arr.map(info => {
-    while (info.quotient > 0) {
-      answer += info.key;
-      info.quotient--;
-    }
-  });
+
+  //   arr.map(info => {
+  //     while (info.quotient > 0) {
+  //       answer += info.key;
+  //       info.quotient--;
+  //     }
+  //   });
   //console.log("arr", arr);
   console.log("input", input, "answer", answer);
   return answer;
 }
 
-//const value = 12;
 console.log(solution(14));
 console.log(solution(6));
 console.log(solution(58));
 console.log(solution(1994));
+console.log(solution(3999));
