@@ -42,6 +42,13 @@ function solution(list1, list2) {
   return (merged.next && merged.next.toString()) || merged.toString();
 }
 
+/**
+ * 꼬리재귀를 이용한 merge
+ * @param {*} list1
+ * @param {*} list2
+ * @param {*} merged
+ * @returns
+ */
 function mergeList(list1, list2, merged) {
   if (list1 === null && list2 === null) {
     return null;
@@ -63,8 +70,7 @@ function mergeList(list1, list2, merged) {
 function solutionLoop(list1, list2) {
   const o = new ListNode();
   let temp = o;
-  const out = mergeList(list1, list2, temp);
-  console.log(o.next.toString(), out);
+  mergeList(list1, list2, temp);
   return o.next.toString();
 }
 
@@ -82,8 +88,32 @@ function solutionLoop(list1, list2) {
 // console.log("o :", solution(makeListNode([0]), makeListNode([0, 0, 0])));
 //console.log("output", solution(makeListNode([]), makeListNode([0])));
 
-//console.log("loop", solutionLoop(makeListNode([0]), makeListNode([0, 0, 0])));
+console.log("loop", solutionLoop(makeListNode([0]), makeListNode([0, 0, 0])));
 console.log(
   "loop",
   solutionLoop(makeListNode([-10, -6, -6, -6, -3, 5]), makeListNode([]))
 );
+
+// var mergeTwoLists = function (l1, l2) {
+//   var mergedHead = { val: -1, next: null },
+//     crt = mergedHead;
+//   while (l1 && l2) {
+//     console.log("val", l1.val, l2.val);
+//     if (l1.val > l2.val) {
+//       crt.next = l2;
+//       l2 = l2.next;
+//     } else {
+//       crt.next = l1;
+//       l1 = l1.next;
+//     }
+//     crt = crt.next;
+//   }
+//   console.log(l1, "l2", l2);
+//   crt.next = l1 || l2;
+
+//   return mergedHead.next.toString();
+// };
+// console.log(
+//   "loop",
+//   mergeTwoLists(makeListNode([0, 4]), makeListNode([-10, -6, -6, 1, 3, 5]))
+// );
