@@ -26,7 +26,14 @@ function makeListNode(input) {
   let head = new ListNode();
   let o = head;
   while (input.length) {
-    o.next = new ListNode(input.shift());
+    const item = input.shift();
+    //console.log("item", item, Array.isArray(item));
+    if (Array.isArray(item)) {
+      o.next = makeListNode(item);
+    } else {
+      o.next = new ListNode(item);
+    }
+
     o = o.next;
   }
   return head.next;
