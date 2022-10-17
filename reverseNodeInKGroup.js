@@ -15,7 +15,8 @@
  *
  *
  * list의 총 길이가 k에 해당하는지 아닌지는 판단하고 reverse를 적용해야 함.
- *
+ * 미리 k번째 까지 루프를 돌며 stack을 구성
+ * stack의 길이가 k와 같으면 reverse와 동시에 마지막에 head를 추가
  */
 
 const listNode = require("./libs/ListNode");
@@ -47,7 +48,6 @@ function reverseNodeKInGroup(head, prev, k = 1) {
   // 시작 리스트의 다음값을 조건에 따라 설정
   prev.next = k > 0 ? origin.next : reverse;
   // 마지막 참조를 리턴
-  console.log("reverse", temp);
   return k > 0 ? temp : headRef;
 }
 
@@ -89,8 +89,53 @@ function solution(head, k = 1) {
   console.log("o", o.next.toString());
 }
 
-//solution(makeListNode([1, 2, 3, 4, 5, 9]), 4);
+function reverseNode(startNode, endNode) {
+  let head = startNode;
+  let next = null;
+  let prev = null;
+  while (head && head !== endNode) {
+    next = head.next;
+    head.next = prev;
+    prev = head;
+    head = next;
+  }
+  return prev;
+}
 
+/**
+ * 참조를 이용한 재귀
+ * @param {*} head
+ * @param {*} k
+ * @returns
+ */
+function priorLearnList(head, k) {
+  let temp_k = k;
+
+  let current = head;
+  while (temp_k > 0 && current) {
+    current = current.next;
+    temp_k -= 1;
+  }
+  // k 전에 참조를 잊었으면 초기값 반환
+  if (temp_k > 0) {
+    return head;
+  }
+
+  const lastNode = head;
+  const groupHead = reverseNode(head, current);
+  if (current) {
+    lastNode.next = priorLearnList(current, k);
+  }
+
+  return groupHead;
+}
+
+/**
+ * 배열을 이용한 리스트 구성
+ * 코드 상 가장 명확하지만 배열에 push, pop때문인지 속도는 참조를 이용한 구성과 비교해 2배 정도 차이가 발생.
+ * @param {*} head
+ * @param {*} k
+ */
 function solutionKGroup(head, k) {
   let stack = [];
   let newNode = new ListNode();
@@ -101,9 +146,7 @@ function solutionKGroup(head, k) {
       stack.push(head);
       head = head.next;
     }
-
     if (stack.length === k) {
-      console.log("head", head);
       while (stack.length) {
         temp.next = stack.pop();
         temp = temp.next;
@@ -115,4 +158,7 @@ function solutionKGroup(head, k) {
   console.log("o", newNode.next.toString());
 }
 
-solutionKGroup(makeListNode([1, 2, 3, 4, 5, 9]), 4);
+console.log(
+  "result",
+  priorLearnList(makeListNode([1, 2, 3, 4, 5, 9]), 9).toString()
+);
