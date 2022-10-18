@@ -81,6 +81,27 @@ function solutionAdvance(haystack, needle) {
 
   return matchingResult(0);
 }
-console.log("solutionAdvance", solutionAdvance("mississippi", "issip"));
-console.log("solutionAdvance", solutionAdvance("hello", "ll"));
-console.log("solutionAdvance", solutionAdvance("saedbutssead", "sad"));
+// console.log("solutionAdvance", solutionAdvance("mississippi", "issip"));
+// console.log("solutionAdvance", solutionAdvance("hello", "ll"));
+// console.log("solutionAdvance", solutionAdvance("saedbutssead", "sad"));
+
+function solutionReference(haystack, needle) {
+  let matchingCount = 0;
+  const needleLen = needle.length;
+  for (let i = 0; i < haystack.length; i++) {
+    if (haystack[i] === needle[matchingCount]) {
+      if (matchingCount === needleLen - 1) {
+        return i - matchingCount;
+      }
+      matchingCount++;
+    } else {
+      // 일치하지 않는 경우 참조 와 인덱스를 매칭카운트 만큼 뒤로 보냄
+      i -= matchingCount;
+      matchingCount = 0;
+    }
+  }
+  return -1;
+}
+console.log("solutionReference", solutionReference("hello", "ll"));
+console.log("solutionReference", solutionReference("mississippi", "issip"));
+console.log("solutionReference", solutionReference("testmessagiees", "age"));
