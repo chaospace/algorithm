@@ -9,6 +9,21 @@
  * output=[1,2,_]
  *
  * 참조를 변경하지 않고 배열에 원소를 중복없이 정렬해야 한다.
+ *
+ * splice를 이용해도 되지만
+ * 가장 빠른 방법은 배열 인덱스를 직접 조작하는 것이다.
+ *
+ * 이경우 원하는 순서로 배열을 조작만 하면 되므로
+ * input=[1,1,2,3] 이 주어지면
+ *
+ * let matchingCount = 0;
+ * for(let j=1; j<input.length;j++){
+ *    if(input[j] !== input[matchingCount]){
+ *       matchingCount
+ *    } else {
+ *    }
+ * }
+ *
  */
 
 function removeDuplicate(chars, index) {
@@ -25,11 +40,24 @@ function removeDuplicate(chars, index) {
 }
 
 function solution(nums) {
-  //const arr = nums.filter((v, idx) => nums[idx] !== nums[idx + 1]);
-  //const len = nums.length;
   const { index, chars } = removeDuplicate(nums, 0);
   console.log(nums);
   return index;
 }
 
-console.log(solution([1, 1, 1, 1, 2, 3, 4, 5, 5, 5, 5, 6]));
+function solutionRef(nums) {
+  nums.sort((a, b) => a - b);
+  console.log("nums", nums);
+  let len = nums.length;
+  let count = 0;
+  for (let i = 1; i < len; i++) {
+    if (nums[count] === nums[i]) {
+      //count++;
+    } else {
+      nums[++count] = nums[i];
+    }
+  }
+  console.log("nums", nums, count + 1);
+}
+
+console.log(solutionRef([1, 1, 1, 2, 3, 4]));
