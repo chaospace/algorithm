@@ -28,73 +28,121 @@ words 원소 조합을 미리 구하지 않는다면 재귀 요청시마다 word
 요청문자열과 일치하는 모든 요소를 대상으로 판단하며 길이가 동일하게 완료되면 해당 문자를 제거한다.
 */
 
-function matching(s, word, current, max) {
-  const char = s[current];
-  //console.log("matching", s, word, current);
-  if (current > max) {
-    return current - max;
-  } else if (char === word[current]) {
-    return matching(s, word, current + 1, max);
-  }
-  return -1;
-}
-
 function getConcatenationList(words) {
-  const arr = [];
-  const wordLen = words[0].length;
-  const wordsLen = words.length;
-  const concatWordLen = wordLen * wordsLen;
+  const stack = [];
 
-  function combination(word) {
-    if (word.length === concatWordLen) {
-      arr.push(word);
+  const loop = (word, list) => {
+    //console.log("list", list);
+    if (list.length == 0) {
+      stack.push(word);
     } else {
-      for (let i = 0; i < wordsLen; i++) {
-        const appendWord = words[i];
-        if (word.length) {
-          word.indexOf(appendWord) === -1 && combination(word + appendWord);
-        } else {
-          combination(appendWord);
-        }
+      console.log("word", list.length);
+      for (let i = 0; i < list.length; i++) {
+        const appendWord = list[i];
+        let clone = [...list];
+        clone.splice(i, 1);
+        loop(word + appendWord, clone);
       }
     }
-  }
-
-  combination("");
-
-  return arr;
-}
-
-function getCandidateList(char, words) {
-  return words.filter(s => s[0] === char);
+  };
+  // console.log("words", words.length);
+  loop("", words);
+  return stack;
 }
 
 function solution(s, words) {
   const wordLen = words[0].length;
   const substringLen = wordLen * words.length;
   const sLen = s.length;
+  console.log("sLen", sLen, substringLen);
   const concatenationList = getConcatenationList(words);
+  console.log("concatenationList", concatenationList);
+  return;
   const stack = [];
+  let prevWord = "";
   if (sLen < substringLen) return null;
-  for (let i = 0; i < sLen - substringLen; i += wordLen) {
-    const candidateList = getCandidateList(s[i], concatenationList);
+  for (let i = 0; i <= sLen - substringLen; i++) {
     const partialWord = s.substring(i, substringLen + i);
-
-    while (candidateList.length) {
-      const candidate = candidateList.shift();
-
-      if (candidate === partialWord) {
-        stack.push({ index: i, partialWord });
-      }
+    // 이전 문자와 동일하면 패스
+    //if (prevWord === partialWord) continue;
+    // console.log(
+    //   "partial",
+    //   partialWord,
+    //   "filter",
+    //   concatenationList.filter(c => partialWord === c)
+    // );
+    const candidateList = concatenationList.filter(c => partialWord === c);
+    if (candidateList.length) {
+      stack.push({ index: i, partialWord });
+      //prevWord = partialWord;
     }
   }
   console.log("stack", stack);
 }
 
-solution("barfoothefoobarman", ["foo", "bar"]);
-solution("wordgoodgoodgoodbestword", ["word", "good", "best", "word"]);
-solution("barfoofoobarthefoobarman", ["bar", "foo", "the"]);
+//solution("barfoothefoobarman", ["foo", "bar"]);
+//solution("wordgoodgoodgoodbestword", ["word", "good", "best", "word"]);
+//solution("barfoofoobarthefoobarman", ["bar", "foo", "the"]);
+// solution("wordgoodgoodgoodbestword", ["word", "good", "best", "good"]);
 
+// solution("lingmindraboofooowingdingbarrwingmonkeypoundcake", [
+//   "fooo",
+//   "barr",
+//   "wing",
+//   "ding",
+//   "wing"
+// ]);
+/*
+solution(
+  "pjzkrkevzztxductzzxmxsvwjkxpvukmfjywwetvfnujhweiybwvvsrfequzkhossmootkmyxgjgfordrpapjuunmqnxxdrqrfgkrsjqbszgiqlcfnrpjlcwdrvbumtotzylshdvccdmsqoadfrpsvnwpizlwszrtyclhgilklydbmfhuywotjmktnwrfvizvnmfvvqfiokkdprznnnjycttprkxpuykhmpchiksyucbmtabiqkisgbhxngmhezrrqvayfsxauampdpxtafniiwfvdufhtwajrbkxtjzqjnfocdhekumttuqwovfjrgulhekcpjszyynadxhnttgmnxkduqmmyhzfnjhducesctufqbumxbamalqudeibljgbspeotkgvddcwgxidaiqcvgwykhbysjzlzfbupkqunuqtraxrlptivshhbihtsigtpipguhbhctcvubnhqipncyxfjebdnjyetnlnvmuxhzsdahkrscewabejifmxombiamxvauuitoltyymsarqcuuoezcbqpdaprxmsrickwpgwpsoplhugbikbkotzrtqkscekkgwjycfnvwfgdzogjzjvpcvixnsqsxacfwndzvrwrycwxrcismdhqapoojegggkocyrdtkzmiekhxoppctytvphjynrhtcvxcobxbcjjivtfjiwmduhzjokkbctweqtigwfhzorjlkpuuliaipbtfldinyetoybvugevwvhhhweejogrghllsouipabfafcxnhukcbtmxzshoyyufjhzadhrelweszbfgwpkzlwxkogyogutscvuhcllphshivnoteztpxsaoaacgxyaztuixhunrowzljqfqrahosheukhahhbiaxqzfmmwcjxountkevsvpbzjnilwpoermxrtlfroqoclexxisrdhvfsindffslyekrzwzqkpeocilatftymodgztjgybtyheqgcpwogdcjlnlesefgvimwbxcbzvaibspdjnrpqtyeilkcspknyylbwndvkffmzuriilxagyerjptbgeqgebiaqnvdubrtxibhvakcyotkfonmseszhczapxdlauexehhaireihxsplgdgmxfvaevrbadbwjbdrkfbbjjkgcztkcbwagtcnrtqryuqixtzhaakjlurnumzyovawrcjiwabuwretmdamfkxrgqgcdgbrdbnugzecbgyxxdqmisaqcyjkqrntxqmdrczxbebemcblftxplafnyoxqimkhcykwamvdsxjezkpgdpvopddptdfbprjustquhlazkjfluxrzopqdstulybnqvyknrchbphcarknnhhovweaqawdyxsqsqahkepluypwrzjegqtdoxfgzdkydeoxvrfhxusrujnmjzqrrlxglcmkiykldbiasnhrjbjekystzilrwkzhontwmehrfsrzfaqrbbxncphbzuuxeteshyrveamjsfiaharkcqxefghgceeixkdgkuboupxnwhnfigpkwnqdvzlydpidcljmflbccarbiegsmweklwngvygbqpescpeichmfidgsjmkvkofvkuehsmkkbocgejoiqcnafvuokelwuqsgkyoekaroptuvekfvmtxtqshcwsztkrzwrpabqrrhnlerxjojemcxel",
+  [
+    "dhvf",
+    "sind",
+    "ffsl",
+    "yekr",
+    "zwzq",
+    "kpeo",
+    "cila",
+    "tfty",
+    "modg",
+    "ztjg",
+    "ybty",
+    "heqg",
+    "cpwo",
+    "gdcj",
+    "lnle",
+    "sefg",
+    "vimw",
+    "bxcb"
+  ]
+);*/
+
+// getConcatenationList([
+//   "dhvf",
+//   "sind",
+//   "ffsl",
+//   "yekr",
+//   "zwzq",
+//   "kpeo",
+//   "cila",
+//   "tfty",
+//   "modg",
+//   "ztjg",
+//   "ybty",
+//   "heqg",
+//   "cpwo",
+//   "gdcj",
+//   "lnle",
+//   "sefg",
+//   "vimw",
+//   "bxcb"
+// ]);
+
+//5*4*3*2
+let count = 0;
+let callCount = 0;
+
+console.log("count", count, "callCount", callCount);
 /*
   조합을 만드는 법은?
   배열에 원소 모든 조합 수 만들기
@@ -133,3 +181,96 @@ solution("barfoofoobarthefoobarman", ["bar", "foo", "the"]);
 //   list.push(w);
 // }
 // console.log("word", list);
+
+function matching(s, words) {
+  let step = words[0].length;
+  let l = 0;
+  let r = s.length;
+
+  while (l < r) {
+    const a = s.substring(l, l + step);
+    const b = s.substring(r - step, r);
+    const aIndex = words.indexOf(a);
+    if (aIndex > -1) {
+      words.splice(aIndex, 1);
+    } else {
+      break;
+    }
+    const bIndex = words.indexOf(b);
+    if (bIndex > -1) {
+      words.splice(bIndex, 1);
+    } else {
+      break;
+    }
+
+    l += step;
+    r -= step;
+  }
+  //console.log("word-length", words.length === 0 ? s : "not-matching");
+  return words.length === 0;
+}
+
+function solutionLoop(s, words) {
+  const sLen = s.length;
+  const wordLen = words[0].length;
+  const wordsLen = wordLen * words.length;
+  const stack = [];
+  for (let i = 0; i <= sLen - wordsLen; i++) {
+    if (matching(s.substring(i, i + wordsLen), words.concat())) {
+      //console.log("success", i, s.substring(i, i + wordsLen));
+      stack.push(i);
+    }
+  }
+  console.log("stack", stack);
+}
+
+solutionLoop("barfoothefoobarman", ["foo", "bar"]);
+solutionLoop("barfoofoobarthefoobarman", ["bar", "foo", "the"]);
+solutionLoop("wordgoodgoodgoodbestword", ["word", "good", "best", "good"]);
+solutionLoop("wordgoodgoodgoodbestword", ["word", "good", "best", "word"]);
+solutionLoop(
+  "pjzkrkevzztxductzzxmxsvwjkxpvukmfjywwetvfnujhweiybwvvsrfequzkhossmootkmyxgjgfordrpapjuunmqnxxdrqrfgkrsjqbszgiqlcfnrpjlcwdrvbumtotzylshdvccdmsqoadfrpsvnwpizlwszrtyclhgilklydbmfhuywotjmktnwrfvizvnmfvvqfiokkdprznnnjycttprkxpuykhmpchiksyucbmtabiqkisgbhxngmhezrrqvayfsxauampdpxtafniiwfvdufhtwajrbkxtjzqjnfocdhekumttuqwovfjrgulhekcpjszyynadxhnttgmnxkduqmmyhzfnjhducesctufqbumxbamalqudeibljgbspeotkgvddcwgxidaiqcvgwykhbysjzlzfbupkqunuqtraxrlptivshhbihtsigtpipguhbhctcvubnhqipncyxfjebdnjyetnlnvmuxhzsdahkrscewabejifmxombiamxvauuitoltyymsarqcuuoezcbqpdaprxmsrickwpgwpsoplhugbikbkotzrtqkscekkgwjycfnvwfgdzogjzjvpcvixnsqsxacfwndzvrwrycwxrcismdhqapoojegggkocyrdtkzmiekhxoppctytvphjynrhtcvxcobxbcjjivtfjiwmduhzjokkbctweqtigwfhzorjlkpuuliaipbtfldinyetoybvugevwvhhhweejogrghllsouipabfafcxnhukcbtmxzshoyyufjhzadhrelweszbfgwpkzlwxkogyogutscvuhcllphshivnoteztpxsaoaacgxyaztuixhunrowzljqfqrahosheukhahhbiaxqzfmmwcjxountkevsvpbzjnilwpoermxrtlfroqoclexxisrdhvfsindffslyekrzwzqkpeocilatftymodgztjgybtyheqgcpwogdcjlnlesefgvimwbxcbzvaibspdjnrpqtyeilkcspknyylbwndvkffmzuriilxagyerjptbgeqgebiaqnvdubrtxibhvakcyotkfonmseszhczapxdlauexehhaireihxsplgdgmxfvaevrbadbwjbdrkfbbjjkgcztkcbwagtcnrtqryuqixtzhaakjlurnumzyovawrcjiwabuwretmdamfkxrgqgcdgbrdbnugzecbgyxxdqmisaqcyjkqrntxqmdrczxbebemcblftxplafnyoxqimkhcykwamvdsxjezkpgdpvopddptdfbprjustquhlazkjfluxrzopqdstulybnqvyknrchbphcarknnhhovweaqawdyxsqsqahkepluypwrzjegqtdoxfgzdkydeoxvrfhxusrujnmjzqrrlxglcmkiykldbiasnhrjbjekystzilrwkzhontwmehrfsrzfaqrbbxncphbzuuxeteshyrveamjsfiaharkcqxefghgceeixkdgkuboupxnwhnfigpkwnqdvzlydpidcljmflbccarbiegsmweklwngvygbqpescpeichmfidgsjmkvkofvkuehsmkkbocgejoiqcnafvuokelwuqsgkyoekaroptuvekfvmtxtqshcwsztkrzwrpabqrrhnlerxjojemcxel",
+  [
+    "dhvf",
+    "sind",
+    "ffsl",
+    "yekr",
+    "zwzq",
+    "kpeo",
+    "cila",
+    "tfty",
+    "modg",
+    "ztjg",
+    "ybty",
+    "heqg",
+    "cpwo",
+    "gdcj",
+    "lnle",
+    "sefg",
+    "vimw",
+    "bxcb"
+  ]
+);
+
+function getPermutation(source) {
+  let count = source.length;
+  const visitList = {};
+  const len = source.length;
+  const arr = [];
+
+  function permutation(s, n) {
+    if (n === count) {
+      arr.push(s);
+      //return;
+    } else {
+      for (let i = 0; i < len; i++) {
+        if (visitList[i]) continue;
+        visitList[i] = true;
+        permutation(s + source[i], n + 1);
+        visitList[i] = false;
+      }
+    }
+  }
+  permutation("", 0);
+  console.log("stack", arr);
+}
