@@ -96,12 +96,14 @@ function solutionReference(haystack, needle) {
       matchingCount++;
     } else {
       // 일치하지 않는 경우 참조 와 인덱스를 매칭카운트 만큼 뒤로 보냄
-      i -= matchingCount;
+      //console.log("i", i, "matcing", matchingCount);
+      // matchingCount보다는 이전 스텝으로만 이동
+      i = Math.max(0, i - 2);
       matchingCount = 0;
     }
   }
   return -1;
 }
-console.log("solutionReference", solutionReference("hello", "ll"));
+// console.log("solutionReference", solutionReference("hello", "ll"));
 console.log("solutionReference", solutionReference("mississippi", "issip"));
-console.log("solutionReference", solutionReference("testmessagiees", "age"));
+// console.log("solutionReference", solutionReference("testmessagiees", "age"));
