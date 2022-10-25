@@ -318,4 +318,50 @@ function solution(list) {
 //console.log(solution([1, 2, 3]));
 //console.log(solution([1, 3, 2]));
 //[5, 5, 2, 3, 4, 7];
-solution([5, 4, 7, 5, 3, 2]);
+//solution([5, 4, 7, 5, 3, 2]);
+
+/**
+ *
+ */
+
+function singlePassApproach(nums) {
+  const len = nums.length;
+  console.log("input", nums);
+  // 시작값은 우측 끝으로 설정
+  let idx = len - 2;
+  // 이전 값과 비교해 내림차순이 발생하면 반복
+  while (idx >= 0 && nums[idx + 1] <= nums[idx]) {
+    idx--;
+  }
+  console.log("idx", idx, "value", nums[idx]);
+  if (idx >= 0) {
+    let j = len - 1;
+    while (nums[j] <= nums[idx]) {
+      j--;
+    }
+    console.log("j", j, "value", nums[j]);
+    swap(nums, idx, j);
+    console.log("swap", nums);
+  }
+  //console.log("nums", nums);
+  reverse(nums, idx + 1);
+  console.log("reverse-nums", nums);
+}
+
+function reverse(nums, start) {
+  let i = start;
+  let j = nums.length - 1;
+  while (i < j) {
+    swap(nums, i, j);
+    i++;
+    j--;
+  }
+}
+
+function swap(list, i, j) {
+  const temp = list[i];
+  list[i] = list[j];
+  list[j] = temp;
+}
+
+singlePassApproach([5, 4, 3, 1, 2]);
