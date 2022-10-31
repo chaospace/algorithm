@@ -17,13 +17,13 @@
  * countAndSay(7) = "312211" = one 3 + one 1 + two 2 + two 1 = "13112221"
  * 13112221
  */
-
+const map = {};
 function parse(s, value, max) {
   if (max === value) {
-    console.log("s", s);
-    return value;
+    return s;
   } else {
     let str = "";
+
     let count = 0;
     let i = 0;
     let prev = s[0];
@@ -38,18 +38,19 @@ function parse(s, value, max) {
       prev = v;
       i++;
     }
+
     return parse(str, value + 1, max);
   }
 }
 
 function solution(n) {
-  //const len = n - 1;
-  parse("1", 1, n);
+  console.log(parse("1", 1, n));
 }
 
 solution(7);
 solution(6);
-solution(5);
-solution(4);
-solution(3);
+// solution(5);
+// solution(4);
+// solution(3);
 solution(1);
+solution(2);
