@@ -16,9 +16,8 @@ Output: 0
  */
 
 /*
-    open, close를 만족하는게 아닌. 올바른 괄호만 체크해야 함
-    substring을 체크하는 것이라 올바르게 끝난 괄호가 연속될 경우 인덱스를 더해야 함.
-    
+  open, close를 만족하는게 아닌. 올바른 괄호만 체크해야 함
+  substring을 체크하는 것이라 올바르게 끝난 괄호가 연속될 경우 인덱스를 더해야 함.  
 */
 function solution(s) {
   const len = s.length;
@@ -38,8 +37,7 @@ function solution(s) {
   }
 
   valid.sort((a, b) => a - b);
-  // 연속된 증가를 보여주면 substring으로 판단.
-  // 앞뒤로 값 차이가 1인 것만 필터.
+  // 연속된 증가를 보여주면 substring으로 판단. 앞뒤로 값 차이가 1인 것만 필터.
   const d = valid.filter((_, idx) => {
     const a = valid[idx] - valid[idx - 1];
     const b = valid[idx + 1] - valid[idx];
@@ -58,13 +56,45 @@ function solution(s) {
   console.log("count", count);
 }
 
-solution("(()");
-solution("(()()(");
-solution(")()()((()");
-solution("()(()");
-solution("()(()))");
-solution("()))()(()))");
+// solution("(()");
+// solution("(()()(");
+// solution(")()()((()");
+// solution("()(()");
+// solution("()(()))");
+// solution("()))()(()))");
+// solution("()(())");
+// solution("()((()))");
+// solution("()((()))))))((())())((((((()");
 
-solution("()(())");
-solution("()((()))");
-solution("()((()))))))((())())((((((()");
+function solutionLoop(s) {
+  const len = s.length;
+  const start = s.indexOf("(");
+
+  const stack = [];
+  const valid = [];
+
+  for (let i = start; i < len; i++) {
+    if (s[i] === "(") {
+      stack.push(i);
+    } else if (stack.length && stack[stack.length - 1] < i) {
+      let before = stack.pop();
+      valid.push(before, i);
+    }
+  }
+  valid.sort((a, b) => a - b);
+
+  let l = 0;
+  let count = 0;
+  for (let i = 1; i < valid.length; i++) {
+    if (valid[i] - valid[i - 1] > 1) {
+      count = Math.max(count, i - l);
+      l = i;
+    }
+  }
+  count = Math.max(count, valid.length - l);
+  console.log("count", count);
+}
+
+solutionLoop("()(())");
+solutionLoop("())()())()");
+solutionLoop("())()()(((()))())");
