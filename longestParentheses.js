@@ -95,6 +95,57 @@ function solutionLoop(s) {
   console.log("count", count);
 }
 
-solutionLoop("()(())");
-solutionLoop("())()())()");
-solutionLoop("())()()(((()))())");
+//solutionLoop("()(())");
+// solutionLoop("())()())()");
+// solutionLoop("())()()(((()))())");
+
+/*
+DP를 이용한 방법
+*/
+
+function solutionDP(s) {
+  if (s.length === 0) return 0;
+  let stack = [-1];
+  let max = 0;
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === "(") {
+      stack.push(i);
+    } else {
+      stack.pop();
+      if (stack.length === 0) {
+        stack.push(i);
+        console.log("stack", stack);
+      } else {
+        console.log("max", max, "i", i, "stack", stack);
+        max = Math.max(max, i - stack[stack.length - 1]);
+      }
+    }
+  }
+  console.log("max", max);
+}
+
+solutionDP("()(())");
+solutionDP(")(())");
+
+function solutionHashSet(s) {
+  let track = { 0: -1 };
+  let max = 0;
+  let level = 0;
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === "(") {
+      level++;
+      track[level] = i;
+    } else {
+      level--;
+      if (level == 0) {
+        level = 0;
+        track = { 0: i };
+      } else {
+        if (level in track) {
+          max = Math.max(max, i - track[level]);
+        }
+      }
+    }
+  }
+  return max;
+}
