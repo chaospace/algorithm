@@ -137,3 +137,7 @@ console.log("binarySearch", binarySearch([""]));
 // solution(["flower", "flow", "flight"]);
 // solution(["air", "crow", "target"]);
 // solution(["dog", "racecar", "car"]);
+
+for (let i = 0; i < 12; i += 3) {
+  console.log("i,", i);
+}
