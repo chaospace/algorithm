@@ -1,47 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      /**
-       * 베스킨라빈스 31 게임
-       * 필승 공식을 만들기
-       * 4n-2에 해당하는 숫자를 선점하는 사람이 승리.
-       * 숫자는 연달아 3개를 부를 수 있음
-       * 먼저 2를 부른 사람이 6, 10, 14, 18, 22, 26, 30을 부를 수 있고
-       * 결국 이길 수 밖에 없는 게임
-       * 이거를 코드로 표현하면?
-       */
-      const start = 2;
-      const endingNumber = 31;
-      let count = 1;
-      let currentNum = start;
-      while (currentNum < endingNumber) {
-        count++;
-        let answer = prompt(
-          "부를 숫자를 입력하세요",
-          `${currentNum + 1},${currentNum + 2},${currentNum + 3}`
-        );
-        currentNum =
-          ((answer = answer.split(",")), answer[answer.length - 1]) * 1;
-        if (currentNum > endingNumber) {
-          alert("31을 불렀으므로 졌습니다.");
-          break;
-        }
-        const goldenNum = 4 * count - 2;
-        let msg = "상대는";
-        for (let i = currentNum + 1; i <= goldenNum; i++) {
-          currentNum = i;
-          msg += `${currentNum},`;
-        }
-        msg += "를 불렀습니다.";
-        alert(msg);
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * 베스킨라빈스 31 게임
+     * 필승 공식 만들기
+     * 4n-2에 해당하는 숫자를 선점하는 사람이 승리.
+     * 숫자는 연달아 3개를 부를 수 있음
+     * 먼저 2를 부른 사람이 6, 10, 14, 18, 22, 26, 30을 부를 수 있고
+     * 결국 이길 수 밖에 없는 게임
+     * 이거를 코드로 표현하면?
+     */
+    const start = 2;
+    const endingNumber = 31;
+    let count = 1;
+    let currentNum = start;
+    while (currentNum < endingNumber) {
+      count++;
+      let answer = prompt(
+        "부를 숫자를 입력하세요",
+        `${currentNum + 1},${currentNum + 2},${currentNum + 3}`
+      );
+      currentNum =
+        ((answer = answer.split(",")), answer[answer.length - 1]) * 1;
+      if (currentNum > endingNumber) {
+        alert("31을 불렀으므로 졌습니다.");
+        break;
       }
-    </script>
-  </body>
+      const goldenNum = 4 * count - 2;
+      let msg = "상대는";
+      for (let i = currentNum + 1; i <= goldenNum; i++) {
+        currentNum = i;
+        msg += `${currentNum},`;
+      }
+      msg += "를 불렀습니다.";
+      alert(msg);
+    }
+  </script>
+</body>
+
 </html>
