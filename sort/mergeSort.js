@@ -79,7 +79,7 @@ function mergeSort(array, start, middle, end) {
     array[i++] = left[lIndex++];
   }
   for (; rIndex < right.length; ) {
-    array[i++] = left[rIndex++];
+    array[i++] = right[rIndex++];
   }
 }
 
@@ -92,6 +92,6 @@ function recursive(array, p, r) {
   }
 }
 //, 9, 11, 6, 2
-const arr = [14, 7, 3, 12];
+const arr = [14, 7, 3, 12, -1, 0, 3, 9, -2];
 recursive(arr, 0, arr.length - 1);
 console.log("array", arr);
