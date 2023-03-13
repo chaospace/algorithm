@@ -8,11 +8,11 @@ function solution(A, B) {
   // matrix-multitple
   function mutiple(row) {
     let arr = [];
-    // 행렬은 가로,세로가 동일하다는 가정으로 진행
-    for (let i = 0; i < B.length; i++) {
+    // 곱하는 배열의 열의 길이는 상관없음.
+    for (let i = 0; i < B[0].length; i++) {
       let v = 0;
-      for (let j = 0; j < B[i].length; j++) {
-        // row는 가로, 곱하는 배열은 세로진행
+      for (let j = 0; j < row.length; j++) {
+        // 곱하는 배열에 row길이는 인자 row의 길이와 동일.
         v += row[j] * B[j][i];
       }
       arr.push(v);
@@ -33,17 +33,20 @@ function solution(A, B) {
 solution(
   [
     [1, 4, 3],
-    [3, 2, 2],
-    [4, 1, 5],
-    [4, 1, 5]
+    [3, 2, 2]
   ],
   [
-    [3, 3, 1],
-    [3, 3, 2],
-    [3, 3, 2]
+    [3, 1],
+    [3, 2],
+    [1, 4]
   ]
 );
-
+/**
+ * 1*3 + 4*3 + 3*3 = 3 + 12 + 9 = 24,
+ * 1*3 + 4*3 + 3*3 = 3 + 12 + 9 = 24,
+ *
+ * 3*3 + 2*3 + 2*3 = 9 + 6 + 6 = 21,
+ */
 /**
  *
  * 1 * 3 + 4 * 3 = 3 + 12,
