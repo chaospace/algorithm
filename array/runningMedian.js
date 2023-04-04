@@ -16,7 +16,7 @@
  */
 
 const Heap = require("../libs/Heap");
-
+const RNG = require("../libs/RNG");
 /**
  * a,b(0<=a<=10000)
  * @param {*} N : 수열의 길이
@@ -43,10 +43,9 @@ function solution(N, a, b) {
       heapMin.push(v);
     }
     if (heapMin.length && heapMax.length && heapMax.top > heapMin.top) {
-      let a = heapMax.top;
-      let b = heapMin.top;
-      heapMax.pop();
-      heapMin.pop();
+      let a = heapMax.pop();
+      let b = heapMin.pop();
+
       heapMax.push(b);
       heapMin.push(a);
     }
@@ -55,6 +54,6 @@ function solution(N, a, b) {
   console.log("ret", ret);
 }
 
-solution(10, 1, 0);
-solution(10, 1, 1);
-solution(10000, 1273, 4936);
+//solution(10, 1, 0);
+//solution(10, 1, 1);
+//solution(10000, 1273, 4936);
