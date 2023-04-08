@@ -3,6 +3,10 @@
  *
  * 구간트리 원리
  * 배열에 특정 구간에 합을 미리 계산해 기억해두고 재사용.
+ * 이진 트리 구성 시
+ * 인덱스 처리 방법
+ * index*2( 좌측노드 )
+ * index*2+1( 우측노드 )
  */
 
 function RMQ(source) {
@@ -47,6 +51,16 @@ function RMQ(source) {
     );
   };
 
+  /**
+   * 구간 트리에 특정 인덱스 정보 업데이트 처리
+   * index를 포함한 노드는 행당 값으로 모두 업데이트 처리
+   * @param {*} index
+   * @param {*} newValue
+   * @param {*} node
+   * @param {*} leftNode
+   * @param {*} rightNode
+   * @returns
+   */
   const _update = (index, newValue, node, leftNode, rightNode) => {
     // 업데이트 구간이 해당 노드와 상관이 없으면 이전값 리턴
     if (index < leftNode || rightNode < index) {

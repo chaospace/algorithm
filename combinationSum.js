@@ -162,4 +162,30 @@ function backtracking(candidates, target) {
   return results;
 }
 
-console.log(backtracking([2, 3, 5], 8));
+function solutionDP(candidates, target) {
+  const sortedNums = candidates.sort((a, b) => a - b);
+  let opt = [];
+
+  for (let sum = 0; sum <= target; sum++) {
+    opt[sum] = [];
+    let combineList = [];
+
+    for (let i = 0; i < sortedNums.length && sortedNums[i] <= sum; i++) {
+      if (sum === sortedNums[i]) {
+        combineList.push([sortedNums[i]]);
+      } else {
+        // 맵에 마지막 값이 현재 값보다 작거나 작으면 조합에 추가
+        for (let prevList of opt[sum - sortedNums[i]]) {
+          if (sortedNums[i] >= prevList[prevList.length - 1]) {
+            combineList.push([...prevList, sortedNums[i]]);
+          }
+        }
+      }
+    }
+    opt[sum] = combineList;
+  }
+  console.log("opt", opt);
+  return opt[target];
+}
+
+console.log(solutionDP([2, 3, 6, 7], 7));

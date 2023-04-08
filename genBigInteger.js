@@ -1,5 +1,7 @@
 // 큰 수 만들기
 /**
+ * - stack을 이용하거나 재귀를 통해 처리 가능
+ * 
  * 어떤 숫자에서 k개의 수를 제거했을 때 얻을 수 있는 가장 큰 숫자 구하기.
  * 숫자는 왼쪽에서 오른쪽으로만 조합.
  *  number	    k	return
@@ -55,6 +57,34 @@ function solution(number, k) {
   return answer.join("");
 }
 
-console.log(solution("1924", 2));
-console.log(solution("1231234", 3));
+// console.log(solution("1924", 2));
+// console.log(solution("1231234", 3));
 console.log(solution("4177252841", 4));
+
+/**
+ * 넘어 온 number에서 k개의 수를 지워 가장 큰 수 반환
+ *
+ * @param {*} number
+ * @param {*} k
+ */
+function solutionLoop(number, k) {
+  function loop(current, rest, n) {
+    // 기저조건 : k가 0이면 나머지 문자를 더한 후 반환
+    if (n === 0) {
+      return current + rest;
+    }
+    // 마지막 숫자가 현재 숫자보다 작을 경우 n이 유효할 때 까지 이전 수 제거
+    let value = rest[0];
+    while (current[current.length - 1] < value && n > 0) {
+      current = current.substring(0, current.length - 1);
+      n--;
+    }
+    current += value.toString();
+    return loop(current, rest.substring(1), n);
+  }
+
+  return loop("", number, k);
+}
+
+console.log("answer:", solutionLoop("1924", 2));
+console.log("answer:", solutionLoop("4177252841", 4));

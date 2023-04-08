@@ -26,6 +26,7 @@ function solution() {
       generator.push(i);
     }
   }
+  console.log("generator", generator);
   return generator.reduce((a, b) => a + b);
 }
 

@@ -48,9 +48,9 @@ function solution(n) {
 }
 
 solution(7);
-solution(6);
+//solution(6);
 // solution(5);
 // solution(4);
 // solution(3);
-solution(1);
-solution(2);
+//solution(1);
+//solution(2);

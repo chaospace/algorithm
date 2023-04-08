@@ -85,7 +85,6 @@ function solution(input) {
       const c = input[end];
       const sum = a + b + c;
       if (sum === 0) {
-        //console.log([a, b, c], "middle", middle, "next", middle + 1);
         store.set(a + "," + b + "," + c, [a, b, c]);
         while (input[middle] === input[middle + 1]) middle++;
         while (input[end] === input[end - 1]) end--;

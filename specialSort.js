@@ -18,3 +18,21 @@ function solution(number) {
 }
 
 console.log(solution([-1, 1, 3, -2, 2]));
+
+function solutionRef(array) {
+  let negatives = [];
+  let positives = [];
+  // 원본배열에서 음수와 양수를 나눔.
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] < 0) {
+      negatives.push(array[i]);
+    } else {
+      positives.push(array[i]);
+    }
+  }
+
+  return negatives.concat(positives);
+  //console.log("ne", negatives);
+}
+
+console.log(solutionRef([-1, 1, 3, -2, 2]));

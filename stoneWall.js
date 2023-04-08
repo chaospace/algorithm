@@ -66,6 +66,7 @@ function solution(H) {
     }
     // stack이 비어 있거나 현재 값이 더 크면 스택에 추가하며 count증가
     if (!blocks.length || blocks[blocks.length - 1] < h) {
+      console.log("push-h", h);
       blocks.push(h);
       count++;
     }

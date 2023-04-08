@@ -326,7 +326,7 @@ function solution(list) {
 
 function singlePassApproach(nums) {
   const len = nums.length;
-  console.log("input", nums);
+  //console.log("input", nums);
   // 시작값은 우측 끝으로 설정
   let idx = len - 2;
   // 이전 값과 비교해 내림차순이 발생하면 반복
@@ -344,7 +344,7 @@ function singlePassApproach(nums) {
     console.log("swap", nums);
   }
   //console.log("nums", nums);
-  reverse(nums, idx + 1);
+  //reverse(nums, idx + 1);
   console.log("reverse-nums", nums);
 }
 
@@ -364,4 +364,62 @@ function swap(list, i, j) {
   list[j] = temp;
 }
 
-singlePassApproach([5, 4, 3, 1, 2]);
+//singlePassApproach([5, 4, 1, 2, 3]);
+
+/**
+ * 다음순열 구하기
+ *
+ * 순열은 오름차순에서 내림차순으로 구성됨.
+ * ex) [1,2,3] -> [3, 2, 1]
+ *
+ * 동작방식
+ * 다음 순열을 찾기 위해 우측값을 기준으로 오름차순이 발생하는 구간을 찾기.
+ * 찾은 곳은 기준으로 배열의 마지막까지의 차가 가장 작은 곳에 인덱스를 찾아서 서로 swap
+ * swap후 오른쪽에 배열은 내림차순으로 정렬.
+ *
+ * 모든 값이 증가하며 끝나면 다음 순열이 존재하지 않는 것으로 판단해 종료.
+ *
+ *
+ * 다음 순열에 이동은 오름차순에서 내림차순으로 진행.
+ * 단계별 내림차순을 적용하기 위한 조건.
+ * 1 오름차순이 끝나는 곳 A를 찾는다.
+ * 2 A 인덱스에 값을 배열 우측 값과  오름 차순이 발생하는 가장 가까운 인덱스 B를 찾는다.
+ * 3.A와 B를 swap 한다.
+ */
+
+function solutionNextPermutation(p, k = 1) {
+  const len = p.length;
+  // 시작값은 우측 끝으로 설정
+  // -1로 비교하면 기준이 되는 인덱스 설정을 위해 보정값을 줘야 하므로 -2로 사용
+  let idx = len - 2;
+  // 배열에 우측 에서 부터 두개의 값을 비교하며 내림차순이 발생하면 기준 인덱스를 좌측으로 이동
+  // ex) 1 , 3,  2  : 기준 index = 1 -> 0 으로 변경
+  while (idx >= 0 && p[idx + 1] < p[idx]) {
+    idx--;
+  }
+
+  // 다음 순열은 크기 순으로 진행되야 하니까 배열 끝에서 부터 현재 기준인덱스의 값보다 작을 경우 swap인덱스를 앞으로 조정
+  let j = len - 1;
+  while (p[idx] >= p[j]) {
+    j--;
+  }
+
+  //j와 idx swap처리
+  swap(p, idx, j);
+
+  // idx를 기준으로 우측 값들 모두를 swap
+  // 이런 swap대신 특정 인덱스 이상부터 sort를 적용 시킬 수 있을까?
+  console.log("head", p.slice(0, j));
+  console.log("tail", p.slice(j));
+  p = [...p.slice(0, j), ...p.slice(j).sort((a, b) => a - b)];
+  return k - 1 > 0 ? solutionNextPermutation(p, k - 1) : p;
+}
+
+//console.log(solutionNextPermutation([4, 5, 3, 2, 1]));
+console.log(solutionNextPermutation([4, 5, 3, 2, 1], 2));
+
+/**
+ * 머리에서 정리된 내용을 한글로 적는다.
+ * 이를 코드로 변경한다.
+ * 머리에서 정리가 안되면 코드 변환도 안된다.
+ */

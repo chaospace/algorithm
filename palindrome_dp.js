@@ -86,4 +86,4 @@ function findMinInsertionDP(str) {
 
 const a = "abcde";
 console.log("findMinInsertion", findMinInsertion(a, 0, a.length - 1));
-console.log("findMinInsertionDP", findMinInsertionDP(a));
+//console.log("findMinInsertionDP", findMinInsertionDP(a));
