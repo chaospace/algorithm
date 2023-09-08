@@ -36,8 +36,6 @@
  * 1 : 210, 212, 232,
  * 2 : 121, 321, 123, 323
  * 3 : 234, 454
- *
- *
  * @param {*} n
  */
 function solution(n) {
@@ -64,6 +62,52 @@ function solution(n) {
   return store[n].reduce((c, v) => c + v, 0) % 1000000000;
 }
 
-[1, 2].forEach((n) => {
+/**
+ * 등차수열의 일반항
+ * a(n) = 3+2(n-1)
+ * n:1  = 3+2*0 = 3;
+ * n:2  = 3+2*1 = 5;
+ * n:3  = 3+2*2 = 7;
+ * 실제 조합을 만드는 함수를 만든다면 어떻게 될까.
+ * 5+x*9=59
+ * 9x=9
+ * @param {} n
+ */
+function solutionHistory(n) {
+  const cols = 10;
+  const store = [];
+  //10
+  const begin = Math.pow(cols, n - 1);
+  const end = Math.pow(cols, n);
+  // console.log("n", n, begin, end, "store", store);
+  //1씩 차이나는 자리 수  만들기
+  for (let i = begin; i < end; i++) {
+    if (n <= 1) {
+      store.push(i);
+    } else {
+      let strNum = i.toString();
+      let isStair = true;
+      // console.log("strNum", strNum);
+      for (let j = 0; j < strNum.length && isStair; j++) {
+        if (j === 0) {
+          isStair = Math.abs(strNum[j] - strNum[j + 1]) === 1;
+        } else if (j === strNum.length - 1) {
+          isStair = Math.abs(strNum[j] - strNum[j - 1]) === 1;
+        } else {
+          isStair =
+            Math.abs(strNum[j] - strNum[j - 1]) === 1 &&
+            Math.abs(strNum[j] - strNum[j + 1]) === 1;
+        }
+      }
+      if (isStair) {
+        store.push(i);
+      }
+    }
+  }
+  return store.length;
+}
+
+[1, 2, 3].forEach((n) => {
   console.log(`n: ${n}`, solution(n));
+  console.log("len: ", solutionHistory(n));
 });
