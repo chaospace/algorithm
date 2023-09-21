@@ -3,19 +3,12 @@ const { getStartTime } = require("../libs/util");
 /**
  * 나머지 합.
  * 목록 list에 부분합에서 k로 나누어 떨어지는 쌍의 개수를 구하기.
- *
- * 비고 1, 2, 3, 1, 2
- * 1,  1, 3, 6, 7, 9
- *
- * 2,     2, 5, 6, 8
- *
- * 3,        3, 4, 6
- *
- * 1,           1, 3
- *
- * 2               2
- *
- *
+ * input      : 0, 1, 2, 3, 1, 2
+ * 부분합       : 0, 1, 3, 6, 7, 9
+ * k(3)나눈 나머지  :  , 1, 0, 0, 1, 0
+ * 나머지에 결과를 저장하는 배열의 길이는 k-1
+ * k나머지 결과  : 3(완전히 나누어지는 경우), 2(나머지가 1이 되는 경우), 0
+ * 위에 결과에서 나머지가 0이상인 경우는 서로 빼주는 경우 나머지가 0이 되므로 n*(n-1)/2 를 적용해 구할 수 있음.
  * 일반적인 방법은 루프를 돌며 직접 값을 확인하면 됨.
  * 시간을 절약하려면 조합을 이용.
  */
@@ -42,6 +35,7 @@ function solution(list, k) {
       }
     }
   }
+
   return count;
 }
 
@@ -66,7 +60,7 @@ function solutionBackTracking(list, k) {
   for (let i = 0; i < list.length; i++) {
     sum += backtracking(list[i], i, 0);
   }
-
+  console.log("backtracking", sum);
   return sum;
 }
 
@@ -75,26 +69,22 @@ function solutionAd(list, k) {
     if (n <= 1) return 0;
     else return (n * (n - 1)) / 2;
   };
-  let answer = Array.from({ length: 10 }).fill(0);
+  let answer = Array.from({ length: k }).fill(0);
   let sum = 0;
   for (let i = 0; i < list.length; i++) {
     sum += list[i];
+    // 부분합을 k로 나눈 값의 카운트를 체크
     sum %= k;
-    /**
-     * 나머지가 동일한 것에 카운트를 증가.
-     * 나머지가 0인 경우는 이미 만족
-     * 나머지가 동일한 것은 서로 빼면 0으로 만족.
-     */
     answer[sum]++;
   }
-  sum = answer[0];
 
+  //나머지가 0인 확실한 카운트를 기본값으로 사용.
+  sum = answer[0];
+  // 조합을 통해 경우의 수를 카운트를 더하여 총 합을 구한다.
   for (i = 0; i < k; i++) {
-    // 조합을 통해 경우의 수를 카운트.
     sum += combi_two(answer[i]);
   }
-  console.log("list", answer);
-  console.log("answer", sum);
+  return { sum, answer };
 }
 
 [
@@ -103,10 +93,22 @@ function solutionAd(list, k) {
     k: 3,
   },
 ].forEach(({ list, k }) => {
-  let begin = getStartTime();
-  //console.log(`start : ${begin}`);
-  //   console.log(solution(list, k));
-  //   console.log(solutionBackTracking(list, k));
-  solutionAd(list, k);
-  console.log(`diff-time : ${performance.now() - begin}`);
+  console.log(solution(list, k));
+  console.log(solutionBackTracking(list, k));
+  console.log(solutionAd(list, k));
 });
+
+/**
+ 
+ * 1+2 = 3   = 0
+ * 1+2+3 = 6 = 0
+ * 1+2+3+1+2 = 9 = 0
+ * 
+ * 2+3+1 = 6 = 0
+ * 
+ * 3         = 0
+ * 3+1+2 = 6 = 0
+ * 
+ * 1+2   = 3 = 0
+ *
+ */
