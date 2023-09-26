@@ -51,46 +51,47 @@ function binarySearch(source, value, start = 0, end = source.length) {
 }
 
 // source에서 value 이상의 수가 처음으로 나오는 위치를 이진탐색으로 찾아간다.
-function lowerBound(source, value, start = 0, end = source.length) {
-  if (!source.length) return 0; //시작은 0을 리턴
-  const mid = (start + end) >> 1;
-  const next = mid + 1;
-  if (source[mid] > value && source[next] > value) {
-    return lowerBound(source, value, start, mid - 1);
-  } else if (source[mid] < value && source[next] < value) {
-    return lowerBound(source, value, mid + 1, end);
+const lowerBound = (source, value, start = 0, end = source.length) => {
+  // 비교 배열이 비어 있으면 무조건 추가
+  if (!source.length) return 0;
+
+  // 시작값과 종료값이 동일하면 종료.
+  if (end === start) {
+    return start;
   }
-  return source[mid] === value ? mid : next;
-}
+
+  const mid = (start + end) >> 1;
+  //mid값이 value 값과 같으면
+  if (source[mid] < value) {
+    return lowerBound(source, value, mid + 1, end);
+  } else {
+    return lowerBound(source, value, start, mid);
+  }
+};
 
 function solutionDPAd(list) {
   const stack = [];
-  // const findLowerBound = (target) => {
-  //   let n = stack.length - 1;
-  //   while (n >= 0) {
-  //     if (stack[n] < target) {
-  //       return n + 1;
-  //     }
-  //     n--;
-  //   }
-  //   return n + 1;
-  // };
+  const dp = Array.from(list).fill(0);
   //lower bound처리
   for (let i = 0; i < list.length; i++) {
     const current = lowerBound(stack, list[i]);
+    dp[i] = current;
     stack[current] = list[i];
   }
-
+  console.log("dp", dp);
   return stack;
 }
 
 //길이 만큼 반복시 속도 문제가 나오면
 //dp에 저장된 값보다 큰 값을 찾아서 루프에 인덱스를 조절할 수 있다.
 
-[[100, 101, 10, 20, 10, 30, 20, 50]].forEach((list) => {
-  // console.log(solution(list));
-  // console.log(solutionDP(list));
-  console.log(solutionDPAd(list));
+[
+  [10, 20, 10, 30, 20, 50],
+  [1, 5, 2, 1, 4, 3, 4, 5, 2, 1],
+].forEach((list) => {
+  console.log(solution(list));
+  console.log(solutionDP(list));
+  // console.log(solutionDPAd(list));
 });
-// console.log(lowerBound([1, 3, 5], 2));
-// console.log(lowerBound([1, 3, 5], 3));
+
+console.log(lowerBound([10, 101], 102));
