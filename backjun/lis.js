@@ -40,16 +40,6 @@ function solutionDP(list) {
   return dp;
 }
 
-function binarySearch(source, value, start = 0, end = source.length) {
-  const mid = (start + end) >> 1;
-  if (source[mid] < value) {
-    return binarySearch(source, value, mid + 1, end);
-  } else if (source[mid] > value) {
-    return binarySearch(source, value, start, mid - 1);
-  }
-  return mid;
-}
-
 // source에서 value 이상의 수가 처음으로 나오는 위치를 이진탐색으로 찾아간다.
 const lowerBound = (source, value, start = 0, end = source.length) => {
   // 비교 배열이 비어 있으면 무조건 추가
