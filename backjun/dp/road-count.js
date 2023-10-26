@@ -24,8 +24,6 @@
  * 이 값은 0보다 크거나 같고, 2^63-1보다 작거나 같은 자연수이다.
  */
 
-const BigNumber = require("bignumber.js");
-
 function solution({ N, M, K }) {
   const dp = Array.from({ length: M + 1 }, () =>
     Array.from({ length: N + 1 }).fill(Number.MAX_SAFE_INTEGER)
@@ -108,42 +106,30 @@ function solutionB({ N, M, K }) {
   K.forEach(([x1, y1, x2, y2]) => {
     // x좌표가 동일하면 세로 도로를 수리중
     if (x1 === x2) {
-      v_repaire_point[y1][x1] = 1;
-      v_repaire_point[y2][x1] = 1;
-    } else if (y1 === y2) {
-      h_repaire_point[y1][x1] = 1;
-      h_repaire_point[y1][x2] = 1;
+      v_repaire_point[Math.min(y2, y1)][x1] = 1;
+    } else {
+      h_repaire_point[y1][Math.min(x1, x2)] = 1;
     }
   });
 
+  //초기 위치 도로 수리 여부에 따라 값 설정
   for (let i = 1; i <= M; i++) {
-    if (v_repaire_point[i][0] === 1) break;
+    if (v_repaire_point[i - 1][0] === 1) break;
     dp[i][0] = 1;
   }
   for (let i = 1; i <= N; i++) {
-    if (h_repaire_point[0][i] === 1) break;
+    if (h_repaire_point[0][i - 1] === 1) break;
     dp[0][i] = 1;
   }
 
   for (let y = 1; y <= M; y++) {
     for (let x = 1; x <= N; x++) {
-      const base =
-        h_repaire_point[y - 1][x - 1] ||
-        v_repaire_point[y - 1][x - 1] ||
-        v_repaire_point[y][x] ||
-        h_repaire_point[y][x];
-      const repaireTop =
-        base && (h_repaire_point[y - 1][x] || v_repaire_point[y - 1][x]);
-
-      const repaireRight =
-        base && (v_repaire_point[y][x - 1] || h_repaire_point[y][x - 1]);
-
-      if (!repaireRight && !repaireTop) {
-        dp[y][x] = dp[y][x - 1] + dp[y - 1][x];
-      } else if (repaireRight && !repaireTop) {
-        dp[y][x] = dp[y - 1][x];
-      } else if (repaireTop && !repaireRight) {
-        dp[y][x] = dp[y][x - 1];
+      dp[y][x] = BigInt(dp[y][x - 1]) + BigInt(dp[y - 1][x]);
+      if (h_repaire_point[y][x - 1] === 1) {
+        dp[y][x] -= BigInt(dp[y][x - 1]);
+      }
+      if (v_repaire_point[y - 1][x] === 1) {
+        dp[y][x] -= BigInt(dp[y - 1][x]);
       }
     }
   }
@@ -161,12 +147,12 @@ function solutionB({ N, M, K }) {
     ],
     o: 252,
   },
-  {
-    N: 6,
-    M: 6,
-    K: [],
-    o: 2,
-  },
+  // {
+  //   N: 6,
+  //   M: 6,
+  //   K: [],
+  //   o: 2,
+  // },
   {
     N: 2,
     M: 2,
@@ -177,15 +163,13 @@ function solutionB({ N, M, K }) {
     ],
     o: 0,
   },
-  // {
-  //   N: 35,
-  //   M: 31,
-  //   K: [],
-  //   o: 6406484391866534976,
-  // },
+  {
+    N: 35,
+    M: 31,
+    K: [],
+    o: 6406484391866534976,
+  },
 ].forEach((info) => {
   // console.log(solution(info));
   console.log(solutionB(info));
 });
-// 값이 커지면 js숫자 버그인지 정확한 값이 안나옴.
-// BigInt사용 시 조금 더 정확해짐.
