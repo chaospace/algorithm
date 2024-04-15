@@ -1,3 +1,6 @@
+/**
+ * 재귀를 통한 공통문자열 찾아가기.
+ */
 function lcs(x, y, m, n) {
   // 마지막일 경우
   if (m === 0 || n === 0) {
@@ -13,8 +16,15 @@ function lcs(x, y, m, n) {
 
 const a = "AGGTAB";
 const b = "GXTXAYB";
+
 console.log(lcs(a, b, a.length, b.length));
 /**
+ * 최장공통 부분수열, 최장공통 부분문자열
+ * 부분수열일 경우
+ * 연속일 필요가 없어 카운트를 키워가면 됨.
+ * 부분문자열일 경우
+ * 연속될 필요가 있어 dp를 이용 이전 카운트를 이어가야 함.
+ *
  * 동적 계획법을 이용해 해당 인덱스 정보를 map에 기억함.
  * 배열을 순회하며 값을 가져오기 때문에 이전 값을 맵에 기억해두면
  * 다음 차례에 기억된 정보를 토대로 해당 인덱스 정보를 구성할 수 있음.
@@ -47,4 +57,4 @@ function lcsWithMap(x, y) {
   return map[m][n];
 }
 
-console.log(lcsWithMap(a, b, a.length, b.length));
+console.log(lcsWithMap(a, b));
