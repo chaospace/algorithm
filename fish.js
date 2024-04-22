@@ -1,3 +1,4 @@
+const { log } = require("./libs/util");
 /**
  
 N개의 정수로 구성된 두 개의 비어 있지 않은 배열 A와 B가 주어집니다.
@@ -110,6 +111,43 @@ function solution(A, B) {
   return [...upStream, ...downStream].length;
 }
 
+/**
+ *
+ * @param {*} param0
+ * @returns
+ */
+function solutionStack({ fish, stream }) {
+  // stream과 fish 포인터 두개를 관리해야 된다.
+  const queue = [];
+  fish.forEach((size, idx) => {
+    // dir 0은 상류, 1은 하류.
+    queue.push({ size, dir: stream[idx] });
+  });
+  const stack = [];
+  while (queue.length) {
+    const current = queue.shift();
+    if (stack.length) {
+      const last = stack[stack.length - 1];
+      // 이전은 하류 현재는 상류라면 서로 만난다.
+      if (last.dir === 1 && current.dir === 0 && last.size < current.size) {
+        stack.pop(); //이전 것은 제거하고 새로운 방향을 추가.
+        stack.push(current);
+      } else if (
+        (last.dir === 0 && current.dir === 1) ||
+        current.dir === last.dir
+      ) {
+        //이전 상류, 현재 하류는 서로 만날 일이 없어 그냥 추가하면 된다.
+        // stack.pop(); //이전 것은 제거하고 새로운 방향을 추가.
+        stack.push(current);
+      }
+    } else {
+      stack.push(current);
+    }
+  }
+
+  return { queue, stack };
+}
+
 // solution([4, 3, 2, 1, 5], [0, 1, 0, 0, 0]);
 // solution([4, 3, 2, 1, 5], [0, 1, 0, 0, 1]);
 // solution([4, 3, 2, 1, 5], [1, 1, 0, 0, 0]);
@@ -117,3 +155,12 @@ function solution(A, B) {
 // solution([1, 2, 10, 12, 4, 5], [0, 1, 1, 0, 1, 0]);
 //solution([1, 2, 10, 12, 4, 5], [0, 1, 1, 0, 1, 0]);
 solution([1, 3, 2, 5, 10, 4], [0, 1, 1, 0, 1, 0]);
+
+[
+  {
+    fish: [4, 3, 2, 1, 5],
+    stream: [0, 1, 0, 0, 0],
+  },
+].forEach((args) => {
+  log(solutionStack(args));
+});
